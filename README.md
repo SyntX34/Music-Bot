@@ -10,52 +10,55 @@
 
 # JMusicBotJP
 
-JMusicBotは、シンプルでかつ操作性の良いUIを使用しています。セットアップも起動も簡単です。
+JMusicBot uses a simple and easy-to-use UI. It is easy to set up and start.
 
 [![Setup](http://i.imgur.com/VvXYp5j.png)](https://www.cosgy.dev/2019/09/06/jmusicbot-setup/)
 
-# このボットの特徴
+# Features of this bot
 
-* セットアップが簡単
-* 曲を高速にロード
-* Discord Botトークンのみでのセットアップ
-* ラグの少ないスムーズな再生
-* DJという独自の権限
-* シンプルで使いやすいUI
-* チャンネルトピックに表示される再生バー
-* ニコニコ動画、YouTubeや、Soundcloudなどを含む多くのサイトをサポート
-* 多数のオンラインラジオ/ストリームをサポート
-* ローカルファイルの再生
-* 再生リストのサポート
-* サーバーや個人の再生リストを作成
+* Easy to set up
+* Loads songs quickly
+* Setup with Discord Bot token only
+* Smooth playback with little lag
+* Unique authority as a DJ
+* Simple and easy-to-use UI
+* Playbar displayed in channel topic
+* Supports many sites including NicoNico, YouTube, Soundcloud, etc.
+* Supports many online radios/streams
+* Plays local files
+* Playlist support
+* Create server or personal playlists
 
-# セットアップ
+# Setup
 
-このボットはJava11以上のバージョンが必要です。
-Javaがインストールされていない場合は、[こちら](https://www.oracle.com/jp/java/technologies/downloads/) からダウンロードしてください。
-このボットを自分で起動するには [Cosgy Dev 公式ページ](https://www.cosgy.dev/2019/09/06/jmusicbot-setup/) を参照してください
+This bot requires Java 11 or higher.
+If you don't have Java installed, download it from here.
 
-# Dockerを使用したセットアップ
+To start this bot yourself, see the official Cosgy Dev page.
 
-Dockerを使用してJavaのインストールなどを行わずにこのボットを自分で起動することができます。
-Dockerを使用する場合は、[こちら](https://hub.docker.com/r/cyberrex/jmusicbot-jp) を参照してください。
+# Setup using Docker
 
-# 注意
+You can start this bot yourself without installing Java using Docker.
 
-このボットは公開ボットとして使用することはできません。
-個人や小規模のサーバーでの使用を推奨します。
+If you use Docker, see here.
 
-# 質問/提案/バグレポート
+# Note
 
-**機能を提案する前に、推奨/計画された機能リストをお読みください。**<br>
-ボットの機能の変更を提案したり、カスタマイズ・オプションを推奨したり、バグを報告したりしたい場合には、このリポジトリーでIssueを開くか、あるいは [Discordサーバー](https://discord.gg/RBpkHxf)
-に参加してください。(注意:
-追加のAPIキーを必要とする機能リクエストや音楽以外の機能は受け付けません)。
-<br>このボットを気に入っていただけましたらこのリポジトリにStarをしていただけると幸いです。
-また、このボットの開発に必要不可欠な依存ライブラリ[JDA](https://github.com/DV8FromTheWorld/JDA)
-と [lavaplayer](https://github.com/lavalink-devs/lavaplayer)にもStarをしていただけると幸いです。
+This bot cannot be used as a public bot.
 
-# コマンドの例
+Recommended for personal or small servers.
+
+# Questions/Suggestions/Bug Reports
+
+**Please read the Recommended/Planned Features list before suggesting a feature. **<br>
+If you'd like to suggest changes to the bot's functionality, recommend customization options, or report a bug, please open an issue in this repository or join our [Discord server](https://discord.gg/https://discord.gg/2DjsQ4xdd5)
+. (Note:
+We will not accept feature requests that require additional API keys or features other than music).
+<br>If you like this bot, please star this repository.
+We would also appreciate it if you star the dependencies [JDA](https://github.com/DV8FromTheWorld/JDA)
+and [lavaplayer](https://github.com/lavalink-devs/lavaplayer), which are essential for the development of this bot.
+
+# Example commands
 
 ![Example](https://i.imgur.com/tevrtKt.png)
 
