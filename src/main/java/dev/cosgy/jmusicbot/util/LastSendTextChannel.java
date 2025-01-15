@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 
 public class LastSendTextChannel implements CommandListener {
-    // ギルドIDでテキストチャンネルのIDを持ってきます。
+    // Get the text channel ID from the guild ID.
     private static final HashMap<Long, Long> textChannel = new HashMap<>();
     static Logger log = LoggerFactory.getLogger("LastSendTextChannel");
 
@@ -29,10 +29,10 @@ public class LastSendTextChannel implements CommandListener {
     }
 
     public static void SendMessage(Guild guild, String message) {
-        log.debug("メッセージを送信します。");
+        log.debug("Send your message.");
         long textId = GetLastTextId(guild.getIdLong());
         if (textId == 0) {
-            log.debug("チャンネルが保存されていなかったため、メッセージを送信できませんでした。");
+            log.debug("Your message could not be sent because the channel was not saved.");
             return;
         }
         MessageChannel channel = guild.getTextChannelById(textId);
