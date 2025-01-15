@@ -14,6 +14,13 @@ JMusicBot uses a simple and easy-to-use UI. It is easy to set up and start.
 
 [![Setup](http://i.imgur.com/VvXYp5j.png)](https://www.cosgy.dev/2019/09/06/jmusicbot-setup/)
 
+
+# Custom Build:
+
+1. Linux:
+
+- > sudo apt update && sudo apt upgrade -y
+
 # Features of this bot
 
 * Easy to set up
