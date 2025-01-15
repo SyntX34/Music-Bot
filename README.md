@@ -18,8 +18,15 @@ JMusicBot uses a simple and easy-to-use UI. It is easy to set up and start.
 # Custom Build:
 
 1. Linux:
-
-- > sudo apt update && sudo apt upgrade -y
+- ``` sudo su ```
+- ``` git clone https://github.com/SyntX34/Music-Bot.git ```
+- ``` cd Music-Bot ```
+- ``` cd src ```
+- ``` sudo apt update && sudo apt upgrade -y ```
+- ``` sudo apt install default-jdk ```
+- ``` sudo apt install maven -y ```
+- ``` mvn clean package ```
+  After Few minutes head over to /target/, you will find your compiled version here.
 
 # Features of this bot
 
