@@ -84,7 +84,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     }
 
     public void addTrackIfRepeat(AudioTrack track) {
-        // リピートモードの場合は、キューの最後にトラックを追加します
+        // If in repeat mode, add the track to the end of the queue
         RepeatMode mode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
         boolean toEnt = manager.getBot().getSettingsManager().getSettings(guildId).isForceToEndQue();
         if (mode != RepeatMode.OFF) {
@@ -154,7 +154,7 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         RepeatMode repeatMode = manager.getBot().getSettingsManager().getSettings(guildId).getRepeatMode();
 
-        // もしも楽曲再生が通常通り終了し、リピートモードが有効(!OFF)ならばキューに再追加する
+        // If the song finishes playing normally and repeat mode is enabled (!OFF), re-add it to the queue
         if (endReason == AudioTrackEndReason.FINISHED && repeatMode != RepeatMode.OFF) {
             // in RepeatMode.ALL
             if (repeatMode == RepeatMode.ALL) {
@@ -266,12 +266,12 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         "https://gensokyoradio.net/images/albums/original/" + GensokyoInfoAgent.getInfo().getMisc().getAlbumart();
                 }
                 eb.setTitle(GensokyoInfoAgent.getInfo().getSonginfo().getTitle(), titleUrl)
-                        .addField("アルバム", GensokyoInfoAgent.getInfo().getSonginfo().getAlbum(), true)
-                        .addField("アーティスト", GensokyoInfoAgent.getInfo().getSonginfo().getArtist(), true)
-                        .addField("サークル", GensokyoInfoAgent.getInfo().getSonginfo().getCircle(), true);
+                        .addField("album", GensokyoInfoAgent.getInfo().getSonginfo().getAlbum(), true)
+                        .addField("Artist", GensokyoInfoAgent.getInfo().getSonginfo().getArtist(), true)
+                        .addField("circle", GensokyoInfoAgent.getInfo().getSonginfo().getCircle(), true);
 
                 if (Integer.parseInt(GensokyoInfoAgent.getInfo().getSonginfo().getYear()) != 0) {
-                    eb.addField("リリース", GensokyoInfoAgent.getInfo().getSonginfo().getYear(), true);
+                    eb.addField("release", GensokyoInfoAgent.getInfo().getSonginfo().getYear(), true);
                 }
 
                 double progress = (double) GensokyoInfoAgent.getInfo().getSongtimes().getPlayed() / GensokyoInfoAgent.getInfo().getSongtimes().getDuration();
@@ -280,10 +280,10 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
                         + " `[" + FormatUtil.formatTime(GensokyoInfoAgent.getInfo().getSongtimes().getPlayed()) + "/" + FormatUtil.formatTime(GensokyoInfoAgent.getInfo().getSongtimes().getDuration()) + "]` "
                         + FormatUtil.volumeIcon(audioPlayer.getVolume()));
 
-                eb.addField("リスナー", Integer.toString(GensokyoInfoAgent.getInfo().getServerinfo().getListeners()), true)
+                eb.addField("listener", Integer.toString(GensokyoInfoAgent.getInfo().getServerinfo().getListeners()), true)
                         .setColor(new Color(66, 16, 80))
-                        .setFooter("コンテンツはgensokyoradio.netによって提供されています。\n" +
-                                "GRロゴはGensokyo Radioの商標です。" +
+                        .setFooter("Content provided by gensokyoradio.net.\n" +
+                                "The GR logo is a trademark of Gensokyo Radio." +
                                 "\nGensokyo Radio is © LunarSpotlight.", null);
                 if(manager.getBot().getConfig().useNPImages()){
                     eb.setImage(albumArt);
@@ -297,9 +297,9 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
     public MessageCreateData getNoMusicPlaying(JDA jda) {
         Guild guild = guild(jda);
         return new MessageCreateBuilder()
-                .setContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **音楽を再生していません。**"))
+                .setContent(FormatUtil.filter(manager.getBot().getConfig().getSuccess() + " **No music playing.**"))
                 .setEmbeds(new EmbedBuilder()
-                        .setTitle("音楽を再生していません。")
+                        .setTitle("No music playing.")
                         .setDescription(JMusicBot.STOP_EMOJI + " " + FormatUtil.progressBar(-1) + " " + FormatUtil.volumeIcon(audioPlayer.getVolume()))
                         .setColor(guild.getSelfMember().getColor())
                         .build())
@@ -311,22 +311,22 @@ public class AudioHandler extends AudioEventAdapter implements AudioSendHandler 
             long userid = getRequestMetadata().getOwner();
             AudioTrack track = audioPlayer.getPlayingTrack();
 
-            // 幻想郷ラジオを再生しているか確認
+            // Check if Gensokyo Radio is playing
             if (track.getInfo().uri.matches(".*stream.gensokyoradio.net/.*")) {
-                return "**幻想郷ラジオ** [" + (userid == 0 ? "自動再生" : "<@" + userid + ">") + "]"
+                return "**Gensokyo Radio ** [" + (userid == 0 ? "Autoplay" : "<@" + userid + ">") + "]"
                         + "\n" + (audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI) + " "
                         + "[LIVE] "
                         + FormatUtil.volumeIcon(audioPlayer.getVolume());
             }
 
             String title = track.getInfo().title;
-            if (title == null || title.equals("不明なタイトル"))
+            if (title == null || title.equals("Unknown title"))
                 title = track.getInfo().uri;
-            return "**" + title + "** [" + (userid == 0 ? "自動再生" : "<@" + userid + ">") + "]"
+            return "**" + title + "** [" + (userid == 0 ? "Autoplay" : "<@" + userid + ">") + "]"
                     + "\n" + (audioPlayer.isPaused() ? JMusicBot.PAUSE_EMOJI : JMusicBot.PLAY_EMOJI) + " "
                     + "[" + FormatUtil.formatTime(track.getDuration()) + "] "
                     + FormatUtil.volumeIcon(audioPlayer.getVolume());
-        } else return "音楽を再生していません" + JMusicBot.STOP_EMOJI + " " + FormatUtil.volumeIcon(audioPlayer.getVolume());
+        } else return "No music playing" + JMusicBot.STOP_EMOJI + " " + FormatUtil.volumeIcon(audioPlayer.getVolume());
     }
 
     // Audio Send Handler methods

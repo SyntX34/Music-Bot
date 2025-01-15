@@ -42,14 +42,14 @@ public class SettingsManager implements GuildSettingsManager {
             loadedSettings.keySet().forEach((id) -> {
                 JSONObject o = loadedSettings.getJSONObject(id);
 
-                // 以前の(boolean型)バージョンをサポートするための
+                // To support previous (boolean) versions
                 try {
                     if (o.getBoolean("repeat")) {
                         o.put("repeat", RepeatMode.ALL);
                     } else {
                         o.put("repeat", RepeatMode.OFF);
                     }
-                    //バグで誤った値を入れていたのでその数値を正しいものに変更するため
+                    //To change the value to the correct one, since an incorrect value was entered due to a bug
                     if (o.getInt("announce") == 50) {
                         o.put("announce", 0);
                     }
@@ -73,23 +73,23 @@ public class SettingsManager implements GuildSettingsManager {
             // ignore, it just means no settings have been saved yet
             // create an empty json file
             try {
-                LoggerFactory.getLogger("Settings").info("serversettings.json を" + OtherUtil.getPath("serversettings.json").toAbsolutePath() + "に作成しました。");
+                LoggerFactory.getLogger("Settings").info("serversettings.json of" + OtherUtil.getPath("serversettings.json").toAbsolutePath() + "Created on.");
                 Files.write(OtherUtil.getPath("serversettings.json"), new JSONObject().toString(4).getBytes());
             } catch(IOException ex) {
-                LoggerFactory.getLogger("Settings").warn("サーバー設定ファイルの作成に失敗しました:"+ex);
+                LoggerFactory.getLogger("Settings").warn("Failed to create server config file:"+ex);
             }
             return;
         } catch(IOException | JSONException e) {
-            LoggerFactory.getLogger("Settings").warn("サーバー設定ファイルの読み込みに失敗しました: "+e);
+            LoggerFactory.getLogger("Settings").warn("Failed to load server config file: "+e);
         }
     }
 
     /**
-     * ギルドのnull以外の設定を取得します
-     *
-     * @param guild 設定を取得するギルド
-     * @return the 既存の設定、またはそのギルドの新しい設定
-     */
+    * Get the non-null settings for the guild
+    *
+    * @param guild The guild to get the settings for
+    * @return the existing settings or new settings for that guild
+    */
     @Override
     public Settings getSettings(Guild guild) {
         return getSettings(guild.getIdLong());
@@ -136,7 +136,7 @@ public class SettingsManager implements GuildSettingsManager {
         try {
             Files.write(OtherUtil.getPath("serversettings.json"), obj.toString(4).getBytes());
         } catch (IOException ex) {
-            LoggerFactory.getLogger("Settings").warn("ファイルへの書き込みに失敗しました： " + ex);
+            LoggerFactory.getLogger("Settings").warn("Failed to write to file: " + ex);
         }
     }
 }

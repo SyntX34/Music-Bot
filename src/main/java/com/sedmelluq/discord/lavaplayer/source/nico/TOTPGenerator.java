@@ -110,7 +110,7 @@ public class TOTPGenerator {
     public static void main(String[] args) {
         // Example usage
         Scanner scanner = new Scanner(System.in);
-        System.out.println("二段階認証のシークレットキーを入力してください。");
+        System.out.println("Please enter your secret key for two-factor authentication.");
         String secretKey = scanner.next(); // Sample Base32 secret key
 
         Timer timer = new Timer();
@@ -122,7 +122,7 @@ public class TOTPGenerator {
                 String gauge = "=".repeat((int) current) + "-".repeat(TIME_STEP - (int) current);
                 System.out.printf("\rTOTP Code: %s [%s] %s sec", code, gauge, TIME_STEP - (int) current);
             }
-        }, 0, 500); // 0ミリ秒で開始し、500ミリ秒ごとに更新
+        }, 0, 500); // Starts at 0 ms and updates every 500 ms
     }
 }
 

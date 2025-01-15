@@ -29,10 +29,10 @@ public class FairQueue<T extends Queueable> {
     private final Set<Long> set = new HashSet<>();
 
     /**
-     * @deprecated 新しくフェアキューと普通のキューを切り替えられるメゾットを追加したのでそちらを使用してください。
-     * @param item 追加する楽曲情報
-     * @return 何曲目に追加したか
-     */
+    * @deprecated A new method has been added to switch between fair and normal cues, so please use that.
+    * @param item Song information to add
+    * @return Which song was added
+    */
     public int add(T item) {
         int lastIndex;
         for (lastIndex = list.size() - 1; lastIndex > -1; lastIndex--)
@@ -50,11 +50,11 @@ public class FairQueue<T extends Queueable> {
     }
 
     /**
-     * キューに楽曲を追加します。
-     * @param item 楽曲情報
-     * @param forceToEnd 強制的にキューの一番最後に追加するか
-     * @return 何番目に追加したか
-     */
+    * Adds a song to the queue.
+    * @param item Song information
+    * @param forceToEnd Whether to forcefully add to the end of the queue
+    * @return Number added
+    */
     public int add(T item, boolean forceToEnd) {
         if (forceToEnd) {
             list.add(item);
@@ -145,12 +145,12 @@ public class FairQueue<T extends Queueable> {
     }
 
     /**
-     * アイテムをリスト内の別の位置に移動します
-     *
-     * @param from アイテムの位置
-     * @param to   アイテムの新しい位置
-     * @return the 移動したアイテム
-     */
+    * Moves an item to a different position in the list
+    *
+    * @param from item's position
+    * @param to item's new position
+    * @return the moved item
+    */
     public T moveItem(int from, int to) {
         T item = list.remove(from);
         list.add(to, item);

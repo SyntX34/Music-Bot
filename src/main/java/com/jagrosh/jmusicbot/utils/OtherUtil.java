@@ -42,20 +42,20 @@ import java.nio.file.Paths;
  * @author John Grosh <john.a.grosh@gmail.com>
  */
 public class OtherUtil {
-    public final static String NEW_VERSION_AVAILABLE = "利用可能なJMusicBot JPの新しいバージョンがあります!\n"
-            + "現在のバージョン: %s\n"
-            + "最新のバージョン: %s\n\n"
-            + " https://github.com/Cosgy-Dev/MusicBot-JP-java/releases/latest から最新バージョンをダウンロードして下さい。";
+    public final static String NEW_VERSION_AVAILABLE = "There is a new version of JMusicBot JP available!\n"
+            + "Current version: %s\n"
+            + "Latest version: %s\n\n"
+            + " https://github.com/SyntX34/Music-Bot/releases/latest Download the latest version from here.";
     private final static String WINDOWS_INVALID_PATH = "c:\\windows\\system32\\";
 
     /**
-     * 文字列からパスを取得します
-     * また、system32で起動しようとするWindowsの傾向を修正します
-     * ボットがこのパスにアクセスしようとすると、代わりにjarファイルの場所から開始されます。
-     *
-     * @param path 文字列パス
-     * @return the パスオブジェクト
-     */
+    * Gets the path from a string
+    * Also fixes Windows' tendency to try to start in system32
+    * If a bot tries to access this path, it will start from the location of the jar file instead.
+    *
+    * @param path String path
+    * @return the path object
+    */
     public static Path getPath(String path) {
         Path result = Paths.get(path);
         // special logic to prevent trying to access system32
@@ -70,12 +70,12 @@ public class OtherUtil {
     }
 
     /**
-     * jarからリソースを文字列としてロードします
-     *
-     * @param clazz クラスベースオブジェクト
-     * @param name  リソースの名前
-     * @return リソースの内容を含む文字列
-     */
+    * Loads a resource from a jar as a string
+    *
+    * @param clazz Class base object
+    * @param name Name of the resource
+    * @return A string containing the content of the resource
+    */
     public static String loadResource(Object clazz, String name) {
         try {
             return readString(clazz.getClass().getResourceAsStream(name));
@@ -95,11 +95,11 @@ public class OtherUtil {
     }
 
     /**
-     * URLから画像データをロードします
-     *
-     * @param url 画像のURL
-     * @return URLのinputstream
-     */
+    * Loads image data from a URL
+    *
+    * @param url Image URL
+    * @return URL inputstream
+    */
     public static InputStream imageFromUrl(String url) {
         if (url == null)
             return null;
@@ -114,11 +114,11 @@ public class OtherUtil {
     }
 
     /**
-     * 文字列からアクティビティを解析します
-     *
-     * @param game the game, including the action such as 'playing' or 'watching'
-     * @return the parsed activity
-     */
+    * Parses the activity from a string
+    *
+    * @param game the game, including the action such as 'playing' or 'watching'
+    * @return the parsed activity
+    */
     public static Activity parseGame(String game) {
         if (game == null || game.trim().isEmpty() || game.trim().equalsIgnoreCase("default"))
             return null;
@@ -171,7 +171,7 @@ public class OtherUtil {
         if (JMusicBot.class.getPackage() != null && JMusicBot.class.getPackage().getImplementationVersion() != null)
             return JMusicBot.class.getPackage().getImplementationVersion();
         else
-            return "不明";
+            return "not clear";
     }
 
     public static String getLatestVersion() {
@@ -197,15 +197,15 @@ public class OtherUtil {
     public static String getUnsupportedBotReason(JDA jda)
     {
         if (jda.getSelfUser().getFlags().contains(User.UserFlag.VERIFIED_BOT))
-            return "検証済みボットのため、JMusicBot JPを使用することはサポートされていません。\n" +
-                    "VCで音楽を再生するため、権利問題が発生する可能性がある為ご理解とご協力をお願いします。";
+            return "Using JMusicBot JP is not supported as it is a verified bot.\n" +
+                    "Since music will be played on VC, there is a possibility that copyright issues may occur, so we ask for your understanding and cooperation.";
 
         ApplicationInfo info = jda.retrieveApplicationInfo().complete();
         if (info.isBotPublic())
-            return "公開ボットのため、JMusicBot JPを使用することはサポートされていません。\n" +
-                    "デベロッパーポータルで「PUBLIC BOT」を無効にしてください。\n" +
+            return "Using JMusicBot JP is not supported as it is a public bot.\n" +
+                    "Please disable \"PUBLIC BOT\" in the Developer Portal.\n" +
                     "https://discord.com/developers/applications/" + info.getId() + "/bot\n" +
-                    "VCで音楽を再生するため、権利問題が発生する可能性がある為ご理解とご協力をお願いします。";
+                    "Since music will be played on VC, there is a possibility that copyright issues may occur, so we ask for your understanding and cooperation.";
 
         return null;
     }

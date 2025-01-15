@@ -78,7 +78,7 @@ public class Bot {
     public static void updatePlayStatus(Guild guild, Member selfMember, PlayStatus status) {
         if (!INSTANCE.getConfig().getChangeNickName()) return;
         if (!selfMember.hasPermission(Permission.NICKNAME_CHANGE)) {
-            LoggerFactory.getLogger("UpdName").error("ニックネームを変更できませんでした: 権限が不足しています。");
+            LoggerFactory.getLogger("UpdName").error("Could not change nickname: insufficient privileges.");
             return;
         }
 
@@ -158,7 +158,7 @@ public class Bot {
     }
 
     public void resetGame() {
-        Activity game = config.getGame() == null || config.getGame().getName().toLowerCase().matches("(none|なし)") ? null : config.getGame();
+        Activity game = config.getGame() == null || config.getGame().getName().toLowerCase().matches("(none)") ? null : config.getGame();
         if (!Objects.equals(jda.getPresence().getActivity(), game))
             jda.getPresence().setActivity(game);
     }
