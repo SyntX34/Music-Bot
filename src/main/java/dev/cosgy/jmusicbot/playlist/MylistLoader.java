@@ -186,7 +186,7 @@ public class MylistLoader {
                     @Override
                     public void trackLoaded(AudioTrack at) {
                         if (config.isTooLong(at))
-                            errors.add(new PlaylistLoadError(index, items.get(index), "このトラックは許可された最大長を超えています。"));
+                            errors.add(new PlaylistLoadError(index, items.get(index), "This track exceeds the maximum permitted length."));
                         else {
                             at.setUserData(0L);
                             tracks.add(at);
@@ -220,13 +220,13 @@ public class MylistLoader {
 
                     @Override
                     public void noMatches() {
-                        errors.add(new PlaylistLoadError(index, items.get(index), "一致するものが見つかりませんでした。"));
+                        errors.add(new PlaylistLoadError(index, items.get(index), "No matches found."));
                         done();
                     }
 
                     @Override
                     public void loadFailed(FriendlyException fe) {
-                        errors.add(new PlaylistLoadError(index, items.get(index), "トラックを読み込めませんでした: " + fe.getLocalizedMessage()));
+                        errors.add(new PlaylistLoadError(index, items.get(index), "Could not load track:" + fe.getLocalizedMessage()));
                         done();
                     }
                 });

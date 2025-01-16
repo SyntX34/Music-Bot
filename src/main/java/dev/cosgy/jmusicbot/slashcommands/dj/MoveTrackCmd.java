@@ -33,14 +33,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * ユーザーが再生リスト内のトラックを移動できるようにするコマンドです。
+ * A command that allows the user to move between tracks in a playlist.
  */
 public class MoveTrackCmd extends DJCommand {
 
     public MoveTrackCmd(Bot bot) {
         super(bot);
         this.name = "movetrack";
-        this.help = "再生待ちの曲の再生順を変更します";
+        this.help = "Change the order of songs in the queue";
         this.arguments = "<from> <to>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
@@ -64,7 +64,7 @@ public class MoveTrackCmd extends DJCommand {
 
         String[] parts = event.getArgs().split("\\s+", 2);
         if (parts.length < 2) {
-            event.replyError("2つの有効な数字を含んでください。");
+            event.replyError("Please include two valid numbers.");
             return;
         }
 
@@ -73,12 +73,12 @@ public class MoveTrackCmd extends DJCommand {
             from = Integer.parseInt(parts[0]);
             to = Integer.parseInt(parts[1]);
         } catch (NumberFormatException e) {
-            event.replyError("2つの有効な数字を含んでください。");
+            event.replyError("Please include two valid numbers.");
             return;
         }
 
         if (from == to) {
-            event.replyError("同じ位置に移動することはできません。");
+            event.replyError("You can't move to the same location.");
             return;
         }
 
@@ -86,12 +86,12 @@ public class MoveTrackCmd extends DJCommand {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         FairQueue<QueuedTrack> queue = handler.getQueue();
         if (isUnavailablePosition(queue, from)) {
-            String reply = String.format("`%d` は再生待ちに存在しない位置です。", from);
+            String reply = String.format("`%d` is a position that does not exist in the queue.", from);
             event.replyError(reply);
             return;
         }
         if (isUnavailablePosition(queue, to)) {
-            String reply = String.format("`%d` 再生待ちに存在しない位置です。", to);
+            String reply = String.format("`%d` Position does not exist in queue.", to);
             event.replyError(reply);
             return;
         }
@@ -99,15 +99,15 @@ public class MoveTrackCmd extends DJCommand {
         // Move the track
         QueuedTrack track = queue.moveItem(from - 1, to - 1);
         String trackTitle = track.getTrack().getInfo().title;
-        String reply = String.format("**%s** を `%d` から `%d`に移動しました。", trackTitle, from, to);
-        log.info(event.getGuild().getName() + "で %s を %d から %d に移動しました。", trackTitle, from, to);
+        String reply = String.format("Moved **%s** from `%d` to `%d`.", trackTitle, from, to);
+        log.info(event.getGuild().getName() + "Moved %s from %d to %d.", trackTitle, from, to);
         event.replySuccess(reply);
     }
 
     @Override
     public void doCommand(SlashCommandEvent event) {
         if (!checkDJPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
             return;
         }
         int from;
@@ -117,7 +117,7 @@ public class MoveTrackCmd extends DJCommand {
         to = Integer.parseInt(event.getOption("to").getAsString());
 
         if (from == to) {
-            event.reply(event.getClient().getError() + "同じ位置に移動することはできません。").queue();
+            event.reply(event.getClient().getError() + "You can't move to the same location.").queue();
             return;
         }
 
@@ -125,12 +125,12 @@ public class MoveTrackCmd extends DJCommand {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         FairQueue<QueuedTrack> queue = handler.getQueue();
         if (isUnavailablePosition(queue, from)) {
-            String reply = String.format("`%d` は再生待ちに存在しない位置です。", from);
+            String reply = String.format("`%d` is a position that does not exist in the queue.", from);
             event.reply(event.getClient().getError() + reply).queue();
             return;
         }
         if (isUnavailablePosition(queue, to)) {
-            String reply = String.format("`%d` 再生待ちに存在しない位置です。", to);
+            String reply = String.format("`%d` Position does not exist in queue.", to);
             event.reply(event.getClient().getError() + reply).queue();
             return;
         }
@@ -138,7 +138,7 @@ public class MoveTrackCmd extends DJCommand {
         // Move the track
         QueuedTrack track = queue.moveItem(from - 1, to - 1);
         String trackTitle = track.getTrack().getInfo().title;
-        String reply = String.format("**%s** を `%d` から `%d`に移動しました。", trackTitle, from, to);
+        String reply = String.format("Moved **%s** from `%d` to `%d`.", trackTitle, from, to);
         event.reply(event.getClient().getSuccess() + reply).queue();
     }
 }

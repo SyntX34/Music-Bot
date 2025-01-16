@@ -44,14 +44,14 @@ public class SeekCmd extends MusicCommand
     {
         super(bot);
         this.name = "seek";
-        this.help = "再生中の曲の再生位置を変更します。";
+        this.help = "Change the playback position of the currently playing track.";
         this.arguments = "[+ | -] <HH:MM:SS | MM:SS | SS>|<0h0m0s | 0m0s | 0s>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = true;
 
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.STRING, "time", "フォーマット:`1:02:23` `+1:10` `-90`, `1h10m`, `+90s`", true));
+        options.add(new OptionData(OptionType.STRING, "time", "Format: `1:02:23` `+1:10` `-90`, `1h10m`, `+90s`", true));
         this.options = options;
     }
 
@@ -62,14 +62,13 @@ public class SeekCmd extends MusicCommand
         AudioTrack playingTrack = handler.getPlayer().getPlayingTrack();
         if (!playingTrack.isSeekable())
         {
-            event.replyError("このトラックはシークできません。");
+            event.replyError("This track cannot be seeked.");
             return;
         }
 
-
         if (!DJCommand.checkDJPermission(event) && playingTrack.getUserData(RequestMetadata.class).getOwner() != event.getAuthor().getIdLong())
         {
-            event.replyError("あなたは **" + playingTrack.getInfo().title + "** を追加していないので、シークすることはできません！");
+            event.replyError("You did not add **" + playingTrack.getInfo().title + "**, so you cannot seek it!");
             return;
         }
 
@@ -77,7 +76,7 @@ public class SeekCmd extends MusicCommand
         TimeUtil.SeekTime seekTime = TimeUtil.parseTime(args);
         if (seekTime == null)
         {
-            event.replyError("無効なシークです！予想されるフォーマット: " + arguments + "\n例: `1:02:23` `+1:10` `-90`, `1h10m`, `+90s`");
+            event.replyError("Invalid seek! Expected format: " + arguments + "\nExamples: `1:02:23` `+1:10` `-90`, `1h10m`, `+90s`");
             return;
         }
 
@@ -87,7 +86,7 @@ public class SeekCmd extends MusicCommand
         long seekMilliseconds = seekTime.relative ? currentPosition + seekTime.milliseconds : seekTime.milliseconds;
         if (seekMilliseconds > trackDuration)
         {
-            event.replyError("現在のトラックの長さは `" + TimeUtil.formatTime(trackDuration) + "` なので、`" + TimeUtil.formatTime(seekMilliseconds) + "` へシークすることはできません！");
+            event.replyError("The length of the current track is `" + TimeUtil.formatTime(trackDuration) + "`, so seeking to `" + TimeUtil.formatTime(seekMilliseconds) + "` is not possible!");
             return;
         }
 
@@ -97,11 +96,11 @@ public class SeekCmd extends MusicCommand
         }
         catch (Exception e)
         {
-            event.replyError("シーク中にエラーが発生しました: " + e.getMessage());
-            LOG.warn("トラック " + playingTrack.getIdentifier() + " のシークに失敗しました", e);
+            event.replyError("An error occurred while seeking: " + e.getMessage());
+            LOG.warn("Failed to seek track " + playingTrack.getIdentifier(), e);
             return;
         }
-        event.replySuccess("`" + TimeUtil.formatTime(playingTrack.getPosition()) + "/" + TimeUtil.formatTime(playingTrack.getDuration()) + "` にシークしました！");
+        event.replySuccess("Seeked to `" + TimeUtil.formatTime(playingTrack.getPosition()) + "/" + TimeUtil.formatTime(playingTrack.getDuration()) + "`!");
     }
 
     @Override
@@ -110,13 +109,13 @@ public class SeekCmd extends MusicCommand
         AudioTrack playingTrack = handler.getPlayer().getPlayingTrack();
         if (!playingTrack.isSeekable())
         {
-            event.reply("このトラックはシークできません。").queue();
+            event.reply("This track cannot be seeked.").queue();
             return;
         }
 
         if (!DJCommand.checkDJPermission(event.getClient(), event) && playingTrack.getUserData(RequestMetadata.class).getOwner() != event.getUser().getIdLong())
         {
-            event.reply("あなたは **" + playingTrack.getInfo().title + "** を追加していないので、シークすることはできません！").queue();
+            event.reply("You did not add **" + playingTrack.getInfo().title + "**, so you cannot seek it!").queue();
             return;
         }
 
@@ -124,7 +123,7 @@ public class SeekCmd extends MusicCommand
         TimeUtil.SeekTime seekTime = TimeUtil.parseTime(args);
         if (seekTime == null)
         {
-            event.reply("無効なシークです！予想されるフォーマット: " + arguments + "\n例: `1:02:23` `+1:10` `-90`, `1h10m`, `+90s`").queue();
+            event.reply("Invalid seek! Expected format: " + arguments + "\nExamples: `1:02:23` `+1:10` `-90`, `1h10m`, `+90s`").queue();
             return;
         }
 
@@ -134,7 +133,7 @@ public class SeekCmd extends MusicCommand
         long seekMilliseconds = seekTime.relative ? currentPosition + seekTime.milliseconds : seekTime.milliseconds;
         if (seekMilliseconds > trackDuration)
         {
-            event.reply("現在のトラックの長さは `" + TimeUtil.formatTime(trackDuration) + "` なので、`" + TimeUtil.formatTime(seekMilliseconds) + "` へシークすることはできません！").queue();
+            event.reply("The length of the current track is `" + TimeUtil.formatTime(trackDuration) + "`, so seeking to `" + TimeUtil.formatTime(seekMilliseconds) + "` is not possible!").queue();
             return;
         }
 
@@ -144,11 +143,11 @@ public class SeekCmd extends MusicCommand
         }
         catch (Exception e)
         {
-            event.reply("シーク中にエラーが発生しました: " + e.getMessage()).queue();
-            LOG.warn("トラック {} のシークに失敗しました", playingTrack.getIdentifier(), e);
+            event.reply("An error occurred while seeking: " + e.getMessage()).queue();
+            LOG.warn("Failed to seek track {}", playingTrack.getIdentifier(), e);
             return;
         }
-        event.reply("`" + TimeUtil.formatTime(playingTrack.getPosition()) + "/" + TimeUtil.formatTime(playingTrack.getDuration()) + "` にシークしました！").queue();
+        event.reply("Seeked to `" + TimeUtil.formatTime(playingTrack.getPosition()) + "/" + TimeUtil.formatTime(playingTrack.getDuration()) + "`!").queue();
     }
 
 }

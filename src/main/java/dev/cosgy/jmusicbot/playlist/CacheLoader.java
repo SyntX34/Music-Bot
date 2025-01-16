@@ -77,7 +77,7 @@ public class CacheLoader {
 
 
     public void Trim(List<String> list, String str) {
-        log.debug("Trimを実行: " + str);
+        log.debug("Run Trim: " + str);
         String s = str.trim();
         if (s.isEmpty()) {
             return;
@@ -88,7 +88,7 @@ public class CacheLoader {
     public List<Cache> GetCache(String serverId) {
 
         try {
-            log.debug("キャッシュの読み込み開始: " + "cache" + File.separator + serverId + ".cash");
+            log.debug("Cache loading begins: " + "cache" + File.separator + serverId + ".cash");
 
 
             File file = new File(OtherUtil.getPath("cache" + File.separator + serverId + ".cash").toString());
@@ -102,10 +102,10 @@ public class CacheLoader {
             List<dev.cosgy.jmusicbot.util.Cache> deserialized = objectMapper.readValue(data, new TypeReference<List<dev.cosgy.jmusicbot.util.Cache>>() {
             });
 
-            log.debug("キャッシュの読み込み完了");
+            log.debug("Cache loading complete");
             return deserialized;
         } catch (IOException e) {
-            log.debug("キャッシュの読み込み中にエラーが発生しました。");
+            log.debug("An error occurred while loading the cache.");
             e.printStackTrace();
             return null;
         }
@@ -131,14 +131,14 @@ public class CacheLoader {
     }
 
     public boolean cacheExists(String serverId) {
-        log.debug("確認するファイル名：" + serverId + ".cash");
+        log.debug("File name to check:" + serverId + ".cash");
         return Files.exists(OtherUtil.getPath("cache" + File.separator + serverId + ".cash"));
     }
 
     public void createCache(String serverId) throws IOException {
 
         if (cacheExists(serverId)) {
-            log.info("すでにキャッシュファイルが存在していたため、古いキャッシュを削除します。");
+            log.info("A cache file already exists, so delete the old cache.");
             deleteCache(serverId);
         }
         Files.createFile(OtherUtil.getPath("cache" + File.separator + serverId + ".cash"));
@@ -216,7 +216,7 @@ public class CacheLoader {
             for (int i = 0; i < items.size(); i++) {
                 boolean last = i + 1 == items.size();
                 int index = i;
-                manager.loadItemOrdered("キャッシュ", items.get(i), new AudioLoadResultHandler() {
+                manager.loadItemOrdered("cache", items.get(i), new AudioLoadResultHandler() {
                     private void done() {
                         if (last) {
                             if (callback != null)
@@ -227,7 +227,7 @@ public class CacheLoader {
                     @Override
                     public void trackLoaded(AudioTrack at) {
                         if (config.isTooLong(at))
-                            errors.add(new CacheLoadError(index, items.get(index), "このトラックは許可された最大長を超えています。"));
+                            errors.add(new CacheLoadError(index, items.get(index), "This track exceeds the maximum permitted length."));
                         else {
                             at.setUserData(0L);
                             tracks.add(at);
@@ -261,13 +261,13 @@ public class CacheLoader {
 
                     @Override
                     public void noMatches() {
-                        errors.add(new CacheLoadError(index, items.get(index), "一致するものが見つかりませんでした。"));
+                        errors.add(new CacheLoadError(index, items.get(index), "No matches found."));
                         done();
                     }
 
                     @Override
                     public void loadFailed(FriendlyException fe) {
-                        errors.add(new CacheLoadError(index, items.get(index), "トラックを読み込めませんでした: " + fe.getLocalizedMessage()));
+                        errors.add(new CacheLoadError(index, items.get(index), "Could not load track: " + fe.getLocalizedMessage()));
                         done();
                     }
                 });

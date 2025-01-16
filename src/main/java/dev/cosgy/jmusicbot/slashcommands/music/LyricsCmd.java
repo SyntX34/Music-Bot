@@ -38,14 +38,14 @@ public class LyricsCmd extends MusicCommand {
     public LyricsCmd(Bot bot) {
         super(bot);
         this.name = "lyrics";
-        this.arguments = "[曲名]";
-        this.help = "曲の歌詞を表示します";
+        this.arguments = "[Song Title]";
+        this.help = "Display the lyrics of the song";
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
 
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.STRING, "name", "曲名", false));
+        options.add(new OptionData(OptionType.STRING, "name", "Song Title", false));
         this.options = options;
     }
 
@@ -58,7 +58,7 @@ public class LyricsCmd extends MusicCommand {
             if (sendingHandler.isMusicPlaying(event.getJDA()))
                 title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
             else {
-                event.reply(event.getClient().getError() + "曲が再生されていないため使用できません。").queue();
+                event.reply(event.getClient().getError() + "Cannot be used because the song is not playing.").queue();
                 return;
             }
         } else
@@ -66,7 +66,7 @@ public class LyricsCmd extends MusicCommand {
         lClient.getLyrics(title).thenAccept(lyrics ->
         {
             if (lyrics == null) {
-                event.reply(event.getClient().getError() + "`" + title + "` の歌詞は見つかりませんでした。" + (event.getOption("name").getAsString().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : "")).queue();
+                event.reply(event.getClient().getError() + "`" + title + "` No lyrics found." + (event.getOption("name").getAsString().isEmpty() ? " Try manually entering the song title (`lyrics [song title]`)": "")).queue();
                 return;
             }
 
@@ -75,7 +75,7 @@ public class LyricsCmd extends MusicCommand {
                     .setColor(event.getMember().getColor())
                     .setTitle(lyrics.getTitle(), lyrics.getURL());
             if (lyrics.getContent().length() > 15000) {
-                event.reply(event.getClient().getWarning() + " `" + title + "` の歌詞の曲が見つかりましたが、正しくない可能性があります: " + lyrics.getURL()).queue();
+                event.reply(event.getClient().getWarning() + " `" + title + "` We found a song with the lyrics, but they may not be correct: " + lyrics.getURL()).queue();
             } else if (lyrics.getContent().length() > 2000) {
                 String content = lyrics.getContent().trim();
                 while (content.length() > 2000) {
@@ -105,7 +105,7 @@ public class LyricsCmd extends MusicCommand {
             if (sendingHandler.isMusicPlaying(event.getJDA()))
                 title = sendingHandler.getPlayer().getPlayingTrack().getInfo().title;
             else {
-                event.replyError("曲が再生されていないため使用できません。");
+                event.replyError("Cannot be used because the song is not playing.");
                 return;
             }
         } else
@@ -113,7 +113,7 @@ public class LyricsCmd extends MusicCommand {
         lClient.getLyrics(title).thenAccept(lyrics ->
         {
             if (lyrics == null) {
-                event.replyError("`" + title + "` の歌詞は見つかりませんでした。" + (event.getArgs().isEmpty() ? " 曲名を手動で入力してみてください (`lyrics [曲名]`)" : ""));
+                event.replyError("`" + title + "` No lyrics found." + (event.getArgs().isEmpty() ? " Try manually entering the song title (`lyrics [song title]`)": ""));
                 return;
             }
 
@@ -122,7 +122,7 @@ public class LyricsCmd extends MusicCommand {
                     .setColor(event.getSelfMember().getColor())
                     .setTitle(lyrics.getTitle(), lyrics.getURL());
             if (lyrics.getContent().length() > 15000) {
-                event.replyWarning(" `" + title + "` の歌詞の曲が見つかりましたが、正しくない可能性があります: " + lyrics.getURL());
+                event.replyWarning(" `" + title + "` We found a song with the lyrics, but they may not be correct: " + lyrics.getURL());
             } else if (lyrics.getContent().length() > 2000) {
                 String content = lyrics.getContent().trim();
                 while (content.length() > 2000) {

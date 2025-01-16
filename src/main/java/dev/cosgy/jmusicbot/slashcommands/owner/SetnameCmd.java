@@ -31,13 +31,13 @@ public class SetnameCmd extends OwnerCommand {
     public SetnameCmd(Bot bot) {
         this.bot = bot;
         this.name = "setname";
-        this.help = "ボットの名前を設定します。";
+        this.help = "Set the name of the bot.";
         this.arguments = "<name>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = false;
 
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.STRING, "name", "新しいボットの名前", true));
+        options.add(new OptionData(OptionType.STRING, "name", "Name of the new bot", true));
         this.options = options;
     }
 
@@ -46,11 +46,11 @@ public class SetnameCmd extends OwnerCommand {
         try {
             String oldname = event.getJDA().getSelfUser().getName();
             event.getJDA().getSelfUser().getManager().setName(event.getOption("name").getAsString()).complete(false);
-            event.reply(event.getClient().getSuccess() + "ボットの名前を`" + oldname + "` から `" + event.getOption("name").getAsString() + "`に変更しました。").queue();
+            event.reply(event.getClient().getSuccess() + "Name your bot`" + oldname + "` from`" + event.getOption("name").getAsString() + "`has been changed to.").queue();
         } catch (RateLimitedException e) {
-            event.reply(event.getClient().getError() + "名前は1時間に2回しか変更できません。").queue();
+            event.reply(event.getClient().getError() + "You can only change your name twice per hour.").queue();
         } catch (Exception e) {
-            event.reply(event.getClient().getError() + " その名前は使用できません。").queue();
+            event.reply(event.getClient().getError() + " That name is not available.").queue();
         }
     }
 }

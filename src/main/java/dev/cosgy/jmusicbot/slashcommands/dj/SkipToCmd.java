@@ -37,7 +37,7 @@ public class SkipToCmd extends DJCommand {
     public SkipToCmd(Bot bot) {
         super(bot);
         this.name = "skipto";
-        this.help = "指定された曲にスキップします";
+        this.help = "Skip to the specified song";
         this.arguments = "<position>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
@@ -54,39 +54,39 @@ public class SkipToCmd extends DJCommand {
         try {
             index = Integer.parseInt(event.getArgs());
         } catch (NumberFormatException e) {
-            event.reply(event.getClient().getError() + " `" + event.getArgs() + "` は有効な整数ではありません。");
+            event.reply(event.getClient().getError() + " `" + event.getArgs() + "` is not a valid integer.");
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (index < 1 || index > handler.getQueue().size()) {
-            event.reply(event.getClient().getError() + " 1から" + handler.getQueue().size() + "の間の整数でないといけません!");
+            event.reply(event.getClient().getError() + " From 1" + handler.getQueue().size() + "Must be an integer between !");
             return;
         }
         handler.getQueue().skip(index - 1);
-        event.reply(event.getClient().getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "にスキップしました。**");
+        event.reply(event.getClient().getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "Skip to.**");
         handler.getPlayer().stopTrack();
     }
 
     @Override
     public void doCommand(SlashCommandEvent event) {
         if (!checkDJPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
             return;
         }
         int index = 0;
         try {
             index = Integer.parseInt(event.getOption("position").getAsString());
         } catch (NumberFormatException e) {
-            event.reply(event.getClient().getError() + " `" + event.getOption("position").getAsString() + "` は有効な整数ではありません。").queue();
+            event.reply(event.getClient().getError() + " `" + event.getOption("position").getAsString() + "`is not a valid integer.").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (index < 1 || index > handler.getQueue().size()) {
-            event.reply(event.getClient().getError() + " 1から" + handler.getQueue().size() + "の間の整数でないといけません!").queue();
+            event.reply(event.getClient().getError() + " From 1" + handler.getQueue().size() + "Must be an integer between !").queue();
             return;
         }
         handler.getQueue().skip(index - 1);
-        event.reply(event.getClient().getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "にスキップしました。**").queue();
+        event.reply(event.getClient().getSuccess() + " **" + handler.getQueue().get(0).getTrack().getInfo().title + "Skip to.**").queue();
         handler.getPlayer().stopTrack();
     }
 }

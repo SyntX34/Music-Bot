@@ -63,7 +63,7 @@ public abstract class MusicCommand extends SlashCommand {
         }
         bot.getPlayerManager().setUpHandler(event.getGuild());
         if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
-            event.reply(event.getClient().getError() + "コマンドを使用するには、再生中である必要があります。").queue();
+            event.reply(event.getClient().getError() + "Playback must be active to use this command.").queue();
             return;
         }
         if (beListening) {
@@ -74,7 +74,7 @@ public abstract class MusicCommand extends SlashCommand {
             GuildVoiceState userState = event.getMember().getVoiceState();
 
             if (!userState.inAudioChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
-                event.reply(event.getClient().getError() + String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getAsMention() + "**"))).queue();
+                event.reply(event.getClient().getError() + String.format("You must be a member of %s to use this command!", (current == null ? "Voice Channel" : "**" + current.getAsMention() + "**"))).queue();
                 return;
             }
             if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
@@ -82,11 +82,11 @@ public abstract class MusicCommand extends SlashCommand {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                     event.getGuild().getAudioManager().setSelfDeafened(true);
                 } catch (PermissionException ex) {
-                    event.reply(event.getClient().getError() + String.format("**%s**に接続できません!", userState.getChannel().getAsMention())).queue();
+                    event.reply(event.getClient().getError() + String.format("**%s**Can't connect to!", userState.getChannel().getAsMention())).queue();
                     return;
                 }
                 if (userState.getChannel().getType() == ChannelType.STAGE) {
-                    event.getTextChannel().sendMessage(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
+                    event.getTextChannel().sendMessage(event.getClient().getWarning() + String.format("You have joined the Stage channel. You must manually invite speakers to use %s on the Stage channel.", event.getGuild().getSelfMember().getNickname())).queue();
                 }
             }
         }
@@ -110,13 +110,13 @@ public abstract class MusicCommand extends SlashCommand {
                 event.getMessage().delete().queue();
             } catch (PermissionException ignore) {
             }
-            event.replyInDm(event.getClient().getError() + String.format("コマンドは%sでのみ実行できます", channel.getAsMention()));
+            event.replyInDm(event.getClient().getError() + String.format("Command can only be executed on %s", channel.getAsMention()));
             return;
         }
         bot.getPlayerManager().setUpHandler(event.getGuild()); // no point constantly checking for this later
 
         if (bePlaying && !((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).isMusicPlaying(event.getJDA())) {
-            event.reply(event.getClient().getError() + "コマンドを使用するには、再生中である必要があります。");
+            event.reply(event.getClient().getError() + "Playback must be active to use this command.");
             return;
         }
         if (beListening) {
@@ -126,18 +126,18 @@ public abstract class MusicCommand extends SlashCommand {
                 current = (AudioChannelUnion) settings.getVoiceChannel(event.getGuild());
             GuildVoiceState userState = event.getMember().getVoiceState();
             if (!userState.inAudioChannel() || userState.isDeafened() || (current != null && !userState.getChannel().equals(current))) {
-                event.replyError(String.format("このコマンドを使用するには、%sに参加している必要があります！", (current == null ? "音声チャンネル" : "**" + current.getName() + "**")));
+                event.replyError(String.format("You must be a member of %s to use this command!", (current == null ? "Audio Channels" : "**" + current.getName() + "**")));
                 return;
             }
             if (!event.getGuild().getSelfMember().getVoiceState().inAudioChannel()) {
                 try {
                     event.getGuild().getAudioManager().openAudioConnection(userState.getChannel());
                 } catch (PermissionException ex) {
-                    event.reply(event.getClient().getError() + String.format("**%s**に接続できません!", userState.getChannel().getName()));
+                    event.reply(event.getClient().getError() + String.format("**%s**Can't connect to!", userState.getChannel().getName()));
                     return;
                 }
                 if (userState.getChannel().getType() == ChannelType.STAGE) {
-                    event.getTextChannel().sendMessage(event.getClient().getWarning() + String.format("ステージチャンネルに参加しました。ステージチャンネルで%sを使用するには手動でスピーカーに招待する必要があります。", event.getGuild().getSelfMember().getNickname())).queue();
+                    event.getTextChannel().sendMessage(event.getClient().getWarning() + String.format("You have joined the Stage channel. You must manually invite speakers to use %s on the Stage channel.", event.getGuild().getSelfMember().getNickname())).queue();
                 }
             }
         }

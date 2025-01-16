@@ -38,12 +38,12 @@ public class VolumeCmd extends MusicCommand {
         super(bot);
         this.name = "volume";
         this.aliases = new String[]{"vol"};
-        this.help = "音量を設定または表示します";
+        this.help = "Set or display the volume";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.arguments = "[0-150]";
 
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.INTEGER, "vol", "音量は0から150までの整数", true));
+        options.add(new OptionData(OptionType.INTEGER, "vol", "Volume must be an integer between 0 and 150", true));
         this.options = options;
     }
 
@@ -53,7 +53,7 @@ public class VolumeCmd extends MusicCommand {
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         int volume = Objects.requireNonNull(handler).getPlayer().getVolume();
         if (event.getArgs().isEmpty()) {
-            event.reply(FormatUtil.volumeIcon(volume) + " 現在の音量は`" + volume + "`です。");
+            event.reply(FormatUtil.volumeIcon(volume) + " Current volume is `" + volume + "`.");
         } else {
             int nvolume;
             try {
@@ -62,12 +62,12 @@ public class VolumeCmd extends MusicCommand {
                 nvolume = -1;
             }
             if (nvolume < 0 || nvolume > 150)
-                event.reply(event.getClient().getError() + " 音量は0から150までの整数でないといけません。");
+                event.reply(event.getClient().getError() + " Volume must be an integer between 0 and 150.");
             else {
                 handler.getPlayer().setVolume(nvolume);
                 settings.setVolume(nvolume);
-                event.reply(FormatUtil.volumeIcon(nvolume) + " 音量を`" + volume + "`から`" + nvolume + "`に変更しました。");
-                log.info(event.getGuild().getName() + "での音量が" + volume + "から" + nvolume + "に変更されました。");
+                event.reply(FormatUtil.volumeIcon(nvolume) + " Volume changed from `" + volume + "` to `" + nvolume + "`.");
+                log.info("Volume in " + event.getGuild().getName() + " changed from " + volume + " to " + nvolume + ".");
             }
         }
     }
@@ -85,12 +85,13 @@ public class VolumeCmd extends MusicCommand {
             nvolume = -1;
         }
         if (nvolume < 0 || nvolume > 150)
-            event.reply(event.getClient().getError() + " 音量は0から150までの整数でないといけません。").queue();
+            event.reply(event.getClient().getError() + " Volume must be an integer between 0 and 150.").queue();
         else {
             handler.getPlayer().setVolume(nvolume);
             settings.setVolume(nvolume);
-            event.reply(FormatUtil.volumeIcon(nvolume) + " 音量を`" + volume + "`から`" + nvolume + "`に変更しました。").queue();
-            log.info(event.getGuild().getName() + "での音量が" + volume + "から" + nvolume + "に変更されました。");
+            event.reply(FormatUtil.volumeIcon(nvolume) + " Volume changed from `" + volume + "` to `" + nvolume + "`.").queue();
+            log.info("Volume in " + event.getGuild().getName() + " changed from " + volume + " to " + nvolume + ".");
         }
     }
 }
+

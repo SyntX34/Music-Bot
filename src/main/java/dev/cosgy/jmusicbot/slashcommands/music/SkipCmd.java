@@ -29,7 +29,7 @@ public class SkipCmd extends MusicCommand {
     public SkipCmd(Bot bot) {
         super(bot);
         this.name = "skip";
-        this.help = "現在流れている曲のスキップをリクエスト";
+        this.help = "Request to skip the currently playing track";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = true;
         this.bePlaying = true;
@@ -41,43 +41,42 @@ public class SkipCmd extends MusicCommand {
 
         RequestMetadata rm = handler.getRequestMetadata();
         if (event.getAuthor().getIdLong() == rm.getOwner()) {
-            event.reply(event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。");
+            event.reply(event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "Gensokyo Radio" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** was skipped.");
             handler.getPlayer().stopTrack();
         } else {
-            // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
+            // Number of listeners in the voice channel (excluding bots and deafened users)
             int listeners = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened() && m.getUser().getIdLong() != handler.getRequestMetadata().getOwner()).count();
 
-            // 送信するメッセージ
+            // Message to send
             String msg;
 
-            // 現在の投票を取得して、メッセージの送信者が含まれているかどうか
+            // Check if the sender has already voted to skip
             if (handler.getVotes().contains(event.getAuthor().getId())) {
-                msg = event.getClient().getWarning() + " 再生中の曲はスキップリクエスト済みです。 `[";
+                msg = event.getClient().getWarning() + " You have already requested to skip the current track. `[";
             } else {
-                msg = event.getClient().getSuccess() + "現在の曲をスキップリクエストしました。`[";
+                msg = event.getClient().getSuccess() + "You requested to skip the current track. `[";
                 handler.getVotes().add(event.getAuthor().getId());
             }
 
-            // ボイチャにいる人の中から、スキップすることに投票している人数を取得する
+            // Count the number of votes to skip among listeners
             int skippers = (int) event.getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> handler.getVotes().contains(m.getUser().getId())).count();
 
             int required = (int) Math.ceil(listeners * bot.getSettingsManager().getSettings(event.getGuild()).getSkipRatio());
-            msg += skippers + " 票, " + required + "/" + listeners + " 必要]`";
+            msg += skippers + " votes, " + required + "/" + listeners + " required]`";
 
-            // 必要投票数が、ボイチャにいる人数と相違する場合
+            // If the required votes differ from the total listeners
             if (required != listeners) {
-                // メッセージを付加する
-                msg += "スキップリクエスト数は、" + skippers + "です。スキップするには、" + required + "/" + listeners + "必要です。]`";
+                msg += " Skip requests are at " + skippers + ". " + required + "/" + listeners + " required to skip.";
             } else {
                 msg = "";
             }
 
-            // 現在の投票者数が、必要投票数に達しているかどうか
+            // Check if the number of votes meets the requirement
             if (skippers >= required) {
-                msg += "\n" + event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
-                        + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
+                msg += "\n" + event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "Gensokyo Radio" : handler.getPlayer().getPlayingTrack().getInfo().title)
+                        + "** was skipped. " + (rm.getOwner() == 0L ? "(Auto-play)" : "(**" + rm.user.username + "** requested)");
                 handler.getPlayer().stopTrack();
             }
             event.reply(msg);
@@ -90,46 +89,46 @@ public class SkipCmd extends MusicCommand {
 
         RequestMetadata rm = handler.getRequestMetadata();
         if (event.getUser().getIdLong() == rm.getOwner()) {
-            event.reply(event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** をスキップしました。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "Gensokyo Radio" : handler.getPlayer().getPlayingTrack().getInfo().title) + "** was skipped.").queue();
             handler.getPlayer().stopTrack();
         } else {
-            // ボイチャにいる人数 (Bot, スピーカーミュートは含まず)
+            // Number of listeners in the voice channel (excluding bots and deafened users)
             int listeners = (int) event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> !m.getUser().isBot() && !m.getVoiceState().isDeafened() && m.getUser().getIdLong() != handler.getRequestMetadata().getOwner()).count();
 
-            // 送信するメッセージ
+            // Message to send
             String msg;
 
-            // 現在の投票を取得して、メッセージの送信者が含まれているかどうか
+            // Check if the sender has already voted to skip
             if (handler.getVotes().contains(event.getUser().getId())) {
-                msg = event.getClient().getWarning() + " 再生中の曲はスキップリクエスト済みです。 `[";
+                msg = event.getClient().getWarning() + " You have already requested to skip the current track. `[";
             } else {
-                msg = event.getClient().getSuccess() + "現在の曲をスキップリクエストしました。`[";
+                msg = event.getClient().getSuccess() + "You requested to skip the current track. `[";
                 handler.getVotes().add(event.getUser().getId());
             }
 
-            // ボイチャにいる人の中から、スキップすることに投票している人数を取得する
+            // Count the number of votes to skip among listeners
             int skippers = (int) event.getGuild().getSelfMember().getVoiceState().getChannel().getMembers().stream()
                     .filter(m -> handler.getVotes().contains(m.getUser().getId())).count();
 
-            // 必要な投票数 (ボイチャにいる人数 × 0.55)
+            // Required votes (55% of listeners)
             int required = (int) Math.ceil(listeners * .55);
 
-            // 必要投票数が、ボイチャにいる人数と相違する場合
+            // If the required votes differ from the total listeners
             if (required != listeners) {
-                // メッセージを付加する
-                msg += "スキップリクエスト数は、" + skippers + "です。スキップするには、" + required + "/" + listeners + "必要です。]`";
+                msg += " Skip requests are at " + skippers + ". " + required + "/" + listeners + " required to skip.";
             } else {
                 msg = "";
             }
 
-            // 現在の投票者数が、必要投票数に達しているかどうか
+            // Check if the number of votes meets the requirement
             if (skippers >= required) {
-                msg += "\n" + event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
-                        + "**をスキップしました。 " + (rm.getOwner() == 0L ? "(自動再生)" : "(**" + rm.user.username + "**がリクエスト)");
+                msg += "\n" + event.getClient().getSuccess() + "**" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "Gensokyo Radio" : handler.getPlayer().getPlayingTrack().getInfo().title)
+                        + "** was skipped. " + (rm.getOwner() == 0L ? "(Auto-play)" : "(**" + rm.user.username + "** requested)");
                 handler.getPlayer().stopTrack();
             }
             event.reply(msg).queue();
         }
     }
 }
+

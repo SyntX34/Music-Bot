@@ -25,7 +25,7 @@ public class CashCmd extends SlashCommand {
     public CashCmd(Bot bot) {
         this.bot = bot;
         this.name = "cache";
-        this.help = "キャッシュに保存されている曲を表示します。";
+        this.help = "Shows the songs stored in the cache.";
         this.guildOnly = true;
         this.category = new Category("General");
         this.aliases = bot.getConfig().getAliases(this.name);
@@ -55,7 +55,7 @@ public class CashCmd extends SlashCommand {
     @Override
     protected void execute(CommandEvent event) {
         if (!bot.getCacheLoader().cacheExists(event.getGuild().getId())) {
-            event.reply("キャッシュに保存された曲がありませんでした。");
+            event.reply("There were no songs stored in the cache.");
             return;
         }
         int pagenum = 1;
@@ -84,7 +84,7 @@ public class CashCmd extends SlashCommand {
     private String getQueueTitle(String success, int songsLength, long total) {
         StringBuilder sb = new StringBuilder();
 
-        return FormatUtil.filter(sb.append(success).append(" キャッシュに保存された曲一覧 | ").append(songsLength)
+        return FormatUtil.filter(sb.append(success).append(" List of songs stored in the cache| ").append(songsLength)
                 .append(" 曲 | `").append(FormatUtil.formatTime(total)).append("` ")
                 .toString());
     }
@@ -94,42 +94,42 @@ public class CashCmd extends SlashCommand {
             super(bot);
             this.name = "delete";
             this.aliases = new String[]{"dl", "clear"};
-            this.help = "保存されているキャッシュを削除します。";
+            this.help = "Clear the saved cache.";
             this.guildOnly = true;
         }
 
         @Override
         public void doCommand(CommandEvent event) {
             if (!bot.getCacheLoader().cacheExists(event.getGuild().getId())) {
-                event.reply("キャッシュが存在しません。");
+                event.reply("The cache does not exist.");
                 return;
             }
 
             try {
                 bot.getCacheLoader().deleteCache(event.getGuild().getId());
             } catch (IOException e) {
-                event.reply("キャッシュを削除する際にエラーが発生しました。");
+                event.reply("An error occurred while clearing the cache.");
                 e.printStackTrace();
                 return;
             }
-            event.reply("キャッシュを削除しました。");
+            event.reply("I have deleted the cache.");
         }
 
         @Override
         public void doCommand(SlashCommandEvent event) {
             if (!bot.getCacheLoader().cacheExists(event.getGuild().getId())) {
-                event.reply("キャッシュが存在しません。").queue();
+                event.reply("The cache does not exist.").queue();
                 return;
             }
 
             try {
                 bot.getCacheLoader().deleteCache(event.getGuild().getId());
             } catch (IOException e) {
-                event.reply("キャッシュを削除する際にエラーが発生しました。").queue();
+                event.reply("An error occurred while clearing the cache.").queue();
                 e.printStackTrace();
                 return;
             }
-            event.reply("キャッシュを削除しました。").queue();
+            event.reply("I have deleted the cache.").queue();
         }
     }
 
@@ -138,7 +138,7 @@ public class CashCmd extends SlashCommand {
 
         public ShowCmd(Bot bot) {
             this.name = "show";
-            this.help = "キャッシュされている楽曲を一覧表示します。";
+            this.help = "Displays a list of cached songs.";
             this.guildOnly = true;
             this.botPermissions = new Permission[]{Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EMBED_LINKS};
             builder = new Paginator.Builder()
@@ -161,11 +161,11 @@ public class CashCmd extends SlashCommand {
         @Override
         protected void execute(SlashCommandEvent event) {
             if (!bot.getCacheLoader().cacheExists(event.getGuild().getId())) {
-                event.reply("キャッシュに保存された曲がありませんでした。").queue();
+                event.reply("There were no songs stored in the cache.").queue();
                 return;
             }
             int pagenum = 1;
-            event.reply("キャッシュを取得します。").queue();
+            event.reply("Get the cache.").queue();
 
             List<Cache> cache = bot.getCacheLoader().GetCache(event.getGuild().getId());
 

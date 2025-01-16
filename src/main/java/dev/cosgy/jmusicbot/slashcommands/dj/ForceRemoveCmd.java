@@ -39,15 +39,15 @@ public class ForceRemoveCmd extends DJCommand {
     public ForceRemoveCmd(Bot bot) {
         super(bot);
         this.name = "forceremove";
-        this.help = "指定したユーザーのエントリーを再生待ちから削除します";
-        this.arguments = "<ユーザー>";
+        this.help = "Remove the specified user's entry from the queue";
+        this.arguments = "<user>";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.beListening = false;
         this.bePlaying = true;
         this.botPermissions = new Permission[]{Permission.MESSAGE_EMBED_LINKS};
 
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.USER, "user", "ユーザー", true));
+        options.add(new OptionData(OptionType.USER, "user", "User", true));
         this.options = options;
 
     }
@@ -55,13 +55,13 @@ public class ForceRemoveCmd extends DJCommand {
     @Override
     public void doCommand(CommandEvent event) {
         if (event.getArgs().isEmpty()) {
-            event.replyError("ユーザーに言及する必要があります！");
+            event.replyError("A mention must be made of users!");
             return;
         }
 
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getQueue().isEmpty()) {
-            event.replyError("再生待ちには何もありません！");
+            event.replyError("There is nothing waiting to play!");
             return;
         }
 
@@ -70,7 +70,7 @@ public class ForceRemoveCmd extends DJCommand {
         List<Member> found = FinderUtil.findMembers(event.getArgs(), event.getGuild());
 
         if (found.isEmpty()) {
-            event.replyError("ユーザーが見つかりません！");
+            event.replyError("User not found!");
             return;
         } else if (found.size() > 1) {
             OrderedMenu.Builder builder = new OrderedMenu.Builder();
@@ -81,7 +81,7 @@ public class ForceRemoveCmd extends DJCommand {
 
             builder
                     .setSelection((msg, i) -> removeAllEntries(found.get(i - 1).getUser(), event))
-                    .setText("複数のユーザーが見つかりました:")
+                    .setText("Multiple users found:")
                     .setColor(event.getSelfMember().getColor())
                     .useNumbers()
                     .setUsers(event.getAuthor())
@@ -105,30 +105,30 @@ public class ForceRemoveCmd extends DJCommand {
     @Override
     public void doCommand(SlashCommandEvent event) {
         if (!checkDJPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getQueue().isEmpty()) {
-            event.reply(event.getClient().getError() + "再生待ちには何もありません！").queue();
+            event.reply(event.getClient().getError() + "There is nothing waiting to play!").queue();
             return;
         }
 
         User target = event.getOption("user").getAsUser();
         int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
         if (count == 0) {
-            event.reply(event.getClient().getWarning() + "**" + target.getName() + "** の再生待ちに曲がありません！").queue();
+            event.reply(event.getClient().getWarning() + "**" + target.getName() + "** has no songs queued!").queue();
         } else {
-            event.reply(event.getClient().getSuccess() + "**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + target.getName() + "**#" + target.getDiscriminator() + "`" + count + "`songs removed from.").queue();
         }
     }
 
     private void removeAllEntries(User target, CommandEvent event) {
         int count = ((AudioHandler) event.getGuild().getAudioManager().getSendingHandler()).getQueue().removeAll(target.getIdLong());
         if (count == 0) {
-            event.replyWarning("**" + target.getName() + "** の再生待ちに曲がありません！");
+            event.replyWarning("**" + target.getName() + "** There are no songs in the queue!");
         } else {
-            event.replySuccess("**" + target.getName() + "**#" + target.getDiscriminator() + "から`" + count + "`曲削除しました。");
+            event.replySuccess("**" + target.getName() + "**#" + target.getDiscriminator() + "from`" + count + "`I deleted the song.");
         }
     }
 }

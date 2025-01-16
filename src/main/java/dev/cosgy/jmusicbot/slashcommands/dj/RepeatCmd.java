@@ -34,7 +34,7 @@ public class RepeatCmd extends DJCommand {
     public RepeatCmd(Bot bot) {
         super(bot);
         this.name = "repeat";
-        this.help = "再生待ち楽曲の再生が終了したら曲を再追加します";
+        this.help = "Re-add songs when queued songs finish playing";
         this.arguments = "[all|on|single|one|off]";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.guildOnly = true;
@@ -52,7 +52,7 @@ public class RepeatCmd extends DJCommand {
         String args = event.getArgs();
 
         if (args.isEmpty()) {
-            log.info("変更前の再生モード:{}", settings.getRepeatMode());
+            log.info("Previous playback mode: {}", settings.getRepeatMode());
             value = (settings.getRepeatMode() == RepeatMode.OFF ? RepeatMode.ALL : (settings.getRepeatMode() == RepeatMode.ALL ? RepeatMode.SINGLE : (settings.getRepeatMode() == RepeatMode.SINGLE ? RepeatMode.OFF : settings.getRepeatMode())));
         } else if (args.equalsIgnoreCase("true") || args.equalsIgnoreCase("all") || args.equalsIgnoreCase("on")) {
             value = RepeatMode.ALL;
@@ -61,20 +61,19 @@ public class RepeatCmd extends DJCommand {
         } else if (args.equalsIgnoreCase("one") || args.equalsIgnoreCase("single")) {
             value = RepeatMode.SINGLE;
         } else {
-            event.replyError("有効なオプションは\n" +
-                    "```\n" +
-                    "全曲リピート: true, all, on\n" +
-                    "1曲リピート: one, single\n" +
-                    "リピートオフ: false, off" +
-                    "```\n" +
-                    "です\n" +
-                    "(または、オプション無しで切り替えが可能です)");
+            event.replyError("Valid options are\n" +
+            "```\n" +
+            "Repeat all: true, all, on\n" +
+            "Repeat one: one, single\n" +
+            "Repeat off: false, off" +
+            "```\n" +
+            "(or you can switch without options)");
             return;
         }
 
         settings.setRepeatMode(value);
-        log.info("{}でリピートコマンドを実行し、設定を{}に設定しました。", event.getGuild().getName(), value);
-        event.replySuccess("リピートを `" + (value == RepeatMode.ALL ? "有効(全曲リピート)" : (value == RepeatMode.SINGLE ? "有効(1曲リピート)" : "無効")) + "` にしました。");
+        log.info("Executed repeat command with {} and set the setting to {}.", event.getGuild().getName(), value);
+        event.replySuccess("Repeat set to `" + (value == RepeatMode.ALL ? "Enabled (Repeat all songs)" : (value == RepeatMode.SINGLE ? "Enabled (Repeat one song)" : "Disabled")) + "`.");
     }
 
     @Override
@@ -88,19 +87,19 @@ public class RepeatCmd extends DJCommand {
         public SingleCmd(Bot bot) {
             super(bot);
             this.name = "single";
-            this.help = "１曲リピートモードに変更します。";
+            this.help = "Switch to single song repeat mode.";
             this.guildOnly = true;
         }
 
         @Override
         public void doCommand(SlashCommandEvent event) {
             if (!checkDJPermission(event.getClient(), event)) {
-                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+                event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
                 return;
             }
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.SINGLE);
-            event.reply("リピートを `有効(1曲リピート)` にしました。").queue();
+            event.reply("Repeat is enabled (repeat one song).").queue();
         }
 
         @Override
@@ -112,19 +111,19 @@ public class RepeatCmd extends DJCommand {
         public AllCmd(Bot bot) {
             super(bot);
             this.name = "all";
-            this.help = "全曲リピートモードに変更します。";
+            this.help = "Change to repeat all mode.";
             this.guildOnly = true;
         }
 
         @Override
         public void doCommand(SlashCommandEvent event) {
             if (!checkDJPermission(event.getClient(), event)) {
-                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+                event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
                 return;
             }
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.ALL);
-            event.reply("リピートを `有効(全曲リピート)` にしました。").queue();
+            event.reply("Repeat is enabled (repeat all songs).").queue();
         }
 
         @Override
@@ -136,19 +135,19 @@ public class RepeatCmd extends DJCommand {
         public OffCmd(Bot bot) {
             super(bot);
             this.name = "off";
-            this.help = "リピートを無効に変更します。";
+            this.help = "Change repeat to disabled.";
             this.guildOnly = true;
         }
 
         @Override
         public void doCommand(SlashCommandEvent event) {
             if (!checkDJPermission(event.getClient(), event)) {
-                event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+                event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
                 return;
             }
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setRepeatMode(RepeatMode.OFF);
-            event.reply("リピートを `無効` にしました。").queue();
+            event.reply("Repeat has been `disabled`.").queue();
         }
 
         @Override

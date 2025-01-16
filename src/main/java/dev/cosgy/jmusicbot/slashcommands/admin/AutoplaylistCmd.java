@@ -36,13 +36,13 @@ public class AutoplaylistCmd extends AdminCommand {
         this.bot = bot;
         this.guildOnly = true;
         this.name = "autoplaylist";
-        this.arguments = "<name|NONE|なし>";
+        this.arguments = "<name|NONE|None>";
         this.aliases = bot.getConfig().getAliases(this.name);
-        this.help = "サーバーの自動再生リストを設定";
+        this.help = "Set server autoplaylist";
         this.ownerCommand = false;
 
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.STRING, "name", "プレイリストの名前", true));
+        options.add(new OptionData(OptionType.STRING, "name", "Playlist name", true));
 
         this.options = options;
     }
@@ -50,24 +50,24 @@ public class AutoplaylistCmd extends AdminCommand {
     @Override
     protected void execute(SlashCommandEvent event) {
         if (checkAdminPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Cannot execute due to lack of permission.").queue();
             return;
         }
         
         String pName = event.getOption("name").getAsString();
-        if (pName.toLowerCase().matches("(none|なし)")) {
+        if (pName.toLowerCase().matches("(none)")) {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(null);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、なしに設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** I set the auto playlist to none.").queue();
             return;
         }
         if (bot.getPlaylistLoader().getPlaylist(event.getGuild().getId(), pName) == null) {
-            event.reply(event.getClient().getError() + "`" + pName + "`を見つけることができませんでした!").queue();
+            event.reply(event.getClient().getError() + "`" + pName + "`Could not find!").queue();
         } else {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(pName);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pName + "`に設定しました。\n"
-                    + "再生待ちに曲がないときは、自動再生リストの曲が再生されます。").queue();
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** Auto playlists in`" + pName + "`has been set to.\n"
+                    + "When there are no songs in the queue, songs from the auto playlist will play.").queue();
         }
     }
 
@@ -77,23 +77,23 @@ public class AutoplaylistCmd extends AdminCommand {
         String guildId = event.getGuild().getId();
 
         if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + " 再生リスト名、またはNONEを含めてください。");
+            event.reply(event.getClient().getError() + " Include a playlist name, or NONE.");
             return;
         }
-        if (event.getArgs().toLowerCase().matches("(none|なし)")) {
+        if (event.getArgs().toLowerCase().matches("(none)")) {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(null);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、なしに設定しました。");
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** I set the auto playlist to none.");
             return;
         }
         String pName = event.getArgs().replaceAll("\\s+", "_");
         if (bot.getPlaylistLoader().getPlaylist(guildId, pName) == null) {
-            event.reply(event.getClient().getError() + "`" + pName + "`を見つけることができませんでした!");
+            event.reply(event.getClient().getError() + "`" + pName + "`Could not find!");
         } else {
             Settings settings = event.getClient().getSettingsFor(event.getGuild());
             settings.setDefaultPlaylist(pName);
-            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** での自動再生リストを、`" + pName + "`に設定しました。\n"
-                    + "再生待ちに曲がないときは、自動再生リストの曲が再生されます。");
+            event.reply(event.getClient().getSuccess() + "**" + event.getGuild().getName() + "** Auto playlists in`" + pName + "`has been set to.\n"
+                    + "When there are no songs in the queue, songs from the auto playlist will play.");
         }
     }
 }

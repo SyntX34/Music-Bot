@@ -28,7 +28,7 @@ public class NextCmd extends DJCommand {
     public NextCmd(Bot bot) {
         super(bot);
         this.name = "next";
-        this.help = "リピートモードが有効な場合、再生待ちから削除せずに現在の曲をスキップします";
+        this.help = "If repeat mode is enabled, skips the current song without removing it from the queue";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
     }
@@ -41,15 +41,15 @@ public class NextCmd extends DJCommand {
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
 
-        event.reply(event.getClient().getSuccess() + " **" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title)
-                + "**をスキップしました。 (" + (u == null ? "誰か" : "**" + u.getName() + "**") + "がリクエストしました。)");
+       event.reply(event.getClient().getSuccess() + " **" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "Gensokyo Radio" : handler.getPlayer().getPlayingTrack().getInfo().title)
+                + "** skipped. (" + (u == null ? "someone" : "**" + u.getName() + "**") + "requested by)");
         handler.getPlayer().stopTrack();
     }
 
     @Override
     public void doCommand(SlashCommandEvent event) {
         if (!checkDJPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Cannot execute due to insufficient permission.").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
@@ -58,9 +58,9 @@ public class NextCmd extends DJCommand {
         AudioTrack track = handler.getPlayer().getPlayingTrack();
         handler.addTrackIfRepeat(track);
 
-        event.reply(event.getClient().getSuccess() + " **" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "幻想郷ラジオ" : handler.getPlayer().getPlayingTrack().getInfo().title) +
+        event.reply(event.getClient().getSuccess() + " **" + (handler.getPlayer().getPlayingTrack().getInfo().uri.contains("https://stream.gensokyoradio.net/") ? "Gensokyo Radio" : handler.getPlayer().getPlayingTrack().getInfo().title) +
                 handler.getPlayer().getPlayingTrack().getInfo().title
-                + "**をスキップしました。 (" + (u == null ? "誰か" : "**" + u.getName() + "**") + "がリクエストしました。)").queue();
+                + "Skipped **. (" + (u == null ? "someone" : "**" + u.getName() + "**") + "requested by)").queue();
         handler.getPlayer().stopTrack();
     }
 }

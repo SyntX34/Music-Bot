@@ -38,8 +38,8 @@ import java.util.List;
 public class SetdjCmd extends AdminCommand {
     public SetdjCmd(Bot bot) {
         this.name = "setdj";
-        this.help = "ボットコマンドを使用できる役割DJを設定します。";
-        this.arguments = "<役割名|NONE|なし>";
+        this.help = "Sets the role DJ who can use bot commands.";
+        this.arguments = "<role name|NONE|none>";
         this.aliases = bot.getConfig().getAliases(this.name);
 
         this.children = new SlashCommand[]{new SetRole(), new None()};
@@ -48,21 +48,21 @@ public class SetdjCmd extends AdminCommand {
     @Override
     protected void execute(SlashCommandEvent event) {
         if (checkAdminPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Unable to execute due to lack of permissions。").queue();
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
 
         if (event.getOption("role") != null) {
             s.setDJRole(event.getOption("role").getAsRole());
-            event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + event.getOption("role").getAsRole().getName() + "**のユーザーが使用できるように設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "DJ command role,**" + event.getOption("role").getAsRole().getName() + "**It has been set up to be available to users.").queue();
             return;
         }
-        if (event.getOption("none").getAsString().toLowerCase().matches("(none|なし)")) {
+        if (event.getOption("none").getAsString().toLowerCase().matches("(none)")) {
             s.setDJRole(null);
-            event.reply(event.getClient().getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
+            event.reply(event.getClient().getSuccess() + "The DJ role has been reset. Only admins can use DJ commands.").queue();
         } else {
-            event.reply("コマンドが間違っています。").queue();
+            event.reply("Incorrect command.").queue();
         }
     }
 
@@ -70,23 +70,23 @@ public class SetdjCmd extends AdminCommand {
     protected void execute(CommandEvent event) {
         Logger log = LoggerFactory.getLogger("SetDjCmd");
         if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + "役割の名前、またはNONEなどを付けてください。");
+            event.reply(event.getClient().getError() + "Give it a name for the role or something like NONE.");
             return;
         }
         Settings s = event.getClient().getSettingsFor(event.getGuild());
-        if (event.getArgs().toLowerCase().matches("(none|なし)")) {
+        if (event.getArgs().toLowerCase().matches("(none)")) {
             s.setDJRole(null);
-            event.reply(event.getClient().getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。");
+            event.reply(event.getClient().getSuccess() + "The DJ role has been reset. Only admins can use DJ commands.");
         } else {
             List<Role> list = FinderUtil.findRoles(event.getArgs(), event.getGuild());
             if (list.isEmpty())
-                event.reply(event.getClient().getWarning() + "役割が見つかりませんでした \"" + event.getArgs() + "\"");
+                event.reply(event.getClient().getWarning() + "No roles found\"" + event.getArgs() + "\"");
             else if (list.size() > 1)
                 event.reply(event.getClient().getWarning() + FormatUtil.listOfRoles(list, event.getArgs()));
             else {
                 s.setDJRole(list.get(0));
-                log.info("DJコマンドを使える役割が追加されました。(" + list.get(0).getName() + ")");
-                event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + list.get(0).getName() + "**のユーザーが使用できるように設定しました。");
+                log.info("New roles have been added that can use DJ commands.(" + list.get(0).getName() + ")");
+                event.reply(event.getClient().getSuccess() + "DJ command role,**" + list.get(0).getName() + "**It has been set up to be available to users.");
             }
         }
     }
@@ -94,10 +94,10 @@ public class SetdjCmd extends AdminCommand {
     private static class SetRole extends AdminCommand {
         public SetRole() {
             this.name = "set";
-            this.help = "DJ権限を付与する役割を設定する。";
+            this.help = "Set the role that will grant DJ privileges.";
 
             List<OptionData> options = new ArrayList<>();
-            options.add(new OptionData(OptionType.ROLE, "role", "権限を付与する役割", true));
+            options.add(new OptionData(OptionType.ROLE, "role", "Roles that grant permissions", true));
             this.options = options;
         }
 
@@ -107,28 +107,28 @@ public class SetdjCmd extends AdminCommand {
             Role role = event.getOption("role").getAsRole();
 
             s.setDJRole(role);
-            event.reply(event.getClient().getSuccess() + "DJコマンドを役割が、**" + role.getName() + "**のユーザーが使用できるように設定しました。").queue();
+            event.reply(event.getClient().getSuccess() + "DJ command role,**" + role.getName() + "**It has been set up to be available to users.").queue();
         }
     }
 
     private static class None extends AdminCommand {
         public None() {
             this.name = "none";
-            this.help = "DJの役割をリセット";
+            this.help = "Resetting the DJ role";
         }
 
         @Override
         protected void execute(SlashCommandEvent event) {
             Settings s = event.getClient().getSettingsFor(event.getGuild());
             s.setDJRole(null);
-            event.reply(event.getClient().getSuccess() + "DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。").queue();
+            event.reply(event.getClient().getSuccess() + "The DJ role has been reset. Only admins can use DJ commands.").queue();
         }
 
         @Override
         protected void execute(CommandEvent event) {
             Settings s = event.getClient().getSettingsFor(event.getGuild());
             s.setDJRole(null);
-            event.replySuccess("DJの役割はリセットされました。管理者だけがDJコマンドを使用できます。");
+            event.replySuccess("The DJ role has been reset. Only admins can use DJ commands.");
         }
     }
 

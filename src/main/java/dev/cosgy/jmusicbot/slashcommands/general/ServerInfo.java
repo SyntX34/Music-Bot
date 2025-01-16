@@ -12,7 +12,7 @@ import java.util.Objects;
 public class ServerInfo extends SlashCommand {
     public ServerInfo(Bot bot) {
         this.name = "serverinfo";
-        this.help = "サーバーに関する情報を表示します";
+        this.help = "Shows information about the server";
         this.guildOnly = true;
         this.category = new Category("General");
         this.aliases = bot.getConfig().getAliases(this.name);
@@ -35,36 +35,36 @@ public class ServerInfo extends SlashCommand {
         String GuildForumChannelCount = String.valueOf(event.getGuild().getForumChannels().size());
         String GuildLocation = event.getGuild().getLocale().getNativeName();
                 /*
-                .replace("japan", ":flag_jp: 日本")
-                .replace("singapore", ":flag_sg: シンガポール")
-                .replace("hongkong", ":flag_hk: 香港")
-                .replace("Brazil", ":flag_br: ブラジル")
-                .replace("us-central", ":flag_us: 中央アメリカ")
-                .replace("us-west", ":flag_us: 西アメリカ")
-                .replace("us-east", ":flag_us: 東アメリカ")
-                .replace("us-south", ":flag_us: 南アメリカ")
-                .replace("sydney", ":flag_au: シドニー")
-                .replace("eu-west", ":flag_eu: 西ヨーロッパ")
-                .replace("eu-central", ":flag_eu: 中央ヨーロッパ")
-                .replace("russia", ":flag_ru: ロシア");
+                .replace("japan", ":flag_jp: Japan")
+                .replace("singapore", ":flag_sg: Singapore")
+                .replace("hongkong", ":flag_hk: Hong Kong")
+                .replace("Brazil", ":flag_br: Brazil")
+                .replace("us-central", ":flag_us: Central America")
+                .replace("us-west", ":flag_us: West America")
+                .replace("us-east", ":flag_us: East America")
+                .replace("us-south", ":flag_us: South America")
+                .replace("sydney", ":flag_au: Sydney")
+                .replace("eu-west", ":flag_eu: West Europe")
+                .replace("eu-central", ":flag_eu: Central Europe")
+                .replace("russia", ":flag_ru: Russia");
                  */
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setAuthor("サーバー " + GuildName + " の情報", null, GuildIconURL);
+        eb.setAuthor("Server " + GuildName + " info", null, GuildIconURL);
 
-        eb.addField("サーバーID", GuildId, true);
-        eb.addField("サーバー第一言語", GuildLocation, true);
-        eb.addField("サーバーオーナー", GuildOwner, true);
-        eb.addField("メンバー数", GuildMember, true);
-        eb.addField("役職数", GuildRolesCount, true);
-        eb.addField("カテゴリの数", GuildCategoryCount, true);
-        eb.addField("テキストチャンネルの数", GuildTextChannelCount, true);
-        eb.addField("ボイスチャンネルの数", GuildVoiceChannelCount, true);
-        eb.addField("ステージチャンネルの数", GuildStageChannelCount, true);
-        eb.addField("フォーラムチャンネルの数", GuildForumChannelCount, true);
+        eb.addField("Server ID", GuildId, true);
+        eb.addField("Server Primary Language", GuildLocation, true);
+        eb.addField("Server Owner", GuildOwner, true);
+        eb.addField("Number of Members", GuildMember, true);
+        eb.addField("Number of Roles", GuildRolesCount, true);
+        eb.addField("Number of Categories", GuildCategoryCount, true);
+        eb.addField("Number of Text Channels", GuildTextChannelCount, true);
+        eb.addField("Number of Voice Channels", GuildVoiceChannelCount, true);
+        eb.addField("Number of Stage Channels", GuildStageChannelCount, true);
+        eb.addField("Number of Forum Channels", GuildForumChannelCount, true);
 
-        eb.setFooter("サーバー作成日時: " + GuildCreatedDate, null);
+        eb.setFooter("Server creation date: " + GuildCreatedDate, null);
 
         event.replyEmbeds(eb.build()).queue();
     }
@@ -85,36 +85,36 @@ public class ServerInfo extends SlashCommand {
         String GuildStageChannelCount = String.valueOf(event.getGuild().getStageChannels().size());
         String GuildForumChannelCount = String.valueOf(event.getGuild().getForumChannels().size());
         String GuildLocation = event.getGuild().getLocale().getNativeName();
-                /*.replace("japan", ":flag_jp: 日本")
-                .replace("singapore", ":flag_sg: シンガポール")
-                .replace("hongkong", ":flag_hk: 香港")
-                .replace("Brazil", ":flag_br: ブラジル")
-                .replace("us-central", ":flag_us: 中央アメリカ")
-                .replace("us-west", ":flag_us: 西アメリカ")
-                .replace("us-east", ":flag_us: 東アメリカ")
-                .replace("us-south", ":flag_us: 南アメリカ")
-                .replace("sydney", ":flag_au: シドニー")
-                .replace("eu-west", ":flag_eu: 西ヨーロッパ")
-                .replace("eu-central", ":flag_eu: 中央ヨーロッパ")
-                .replace("russia", ":flag_ru: ロシア");*/
+            /*.replace("japan", ":flag_jp: Japan")
+            .replace("singapore", ":flag_sg: Singapore")
+            .replace("hongkong", ":flag_hk: Hong Kong")
+            .replace("Brazil", ":flag_br: Brazil")
+            .replace("us-central", ":flag_us: Central America")
+            .replace("us-west", ":flag_us: West America")
+            .replace("us-east", ":flag_us: East America")
+            .replace("us-south", ":flag_us: South America")
+            .replace("sydney", ":flag_au: Sydney")
+            .replace("eu-west", ":flag_eu: West Europe")
+            .replace("eu-central", ":flag_eu: Central Europe")
+            .replace("russia", ":flag_ru: Russia");*/
 
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setAuthor("サーバー " + GuildName + " の情報", null, GuildIconURL);
+        eb.setAuthor("Server " + GuildName + " info", null, GuildIconURL);
 
-        eb.addField("サーバーID", GuildId, true);
-        eb.addField("サーバー第一言語", GuildLocation, true);
-        eb.addField("サーバーオーナー", GuildOwner, true);
-        eb.addField("メンバー数", GuildMember, true);
-        eb.addField("役職数", GuildRolesCount, true);
-        eb.addField("カテゴリの数", GuildCategoryCount, true);
-        eb.addField("テキストチャンネルの数", GuildTextChannelCount, true);
-        eb.addField("ボイスチャンネルの数", GuildVoiceChannelCount, true);
-        eb.addField("ステージチャンネルの数", GuildStageChannelCount, true);
-        eb.addField("フォーラムチャンネルの数", GuildForumChannelCount, true);
+        eb.addField("Server ID", GuildId, true);
+        eb.addField("Server Primary Language", GuildLocation, true);
+        eb.addField("Server Owner", GuildOwner, true);
+        eb.addField("Number of Members", GuildMember, true);
+        eb.addField("Number of Roles", GuildRolesCount, true);
+        eb.addField("Number of Categories", GuildCategoryCount, true);
+        eb.addField("Number of Text Channels", GuildTextChannelCount, true);
+        eb.addField("Number of Voice Channels", GuildVoiceChannelCount, true);
+        eb.addField("Number of Stage Channels", GuildStageChannelCount, true);
+        eb.addField("Number of Forum Channels", GuildForumChannelCount, true);
 
-        eb.setFooter("サーバー作成日時: " + GuildCreatedDate, null);
+        eb.setFooter("Server Created Date: " + GuildCreatedDate, null);
 
         event.getChannel().sendMessageEmbeds(eb.build()).queue();
     }

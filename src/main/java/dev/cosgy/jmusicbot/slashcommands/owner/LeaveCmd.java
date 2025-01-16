@@ -33,7 +33,7 @@ public class LeaveCmd extends OwnerCommand {
         this.bot = bot;
         this.name = "leave";
         List<OptionData> options = new ArrayList<>();
-        options.add(new OptionData(OptionType.STRING, "serverid", "サーバーID", true));
+        options.add(new OptionData(OptionType.STRING, "serverid", "Server ID", true));
         this.options = options;
     }
 
@@ -46,7 +46,7 @@ public class LeaveCmd extends OwnerCommand {
     @Override
     protected void execute(CommandEvent event) {
         if (event.getArgs().isEmpty()) {
-            event.reply(event.getClient().getError() + "役割の名前、またはNONEなどを付けてください。");
+            event.reply(event.getClient().getError() + "Give it a name for the role or something like NONE.");
             return;
         }
 

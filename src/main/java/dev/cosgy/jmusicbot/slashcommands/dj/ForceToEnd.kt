@@ -26,9 +26,9 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData
 class ForceToEnd(bot: Bot) : DJCommand(bot) {
     init {
         this.name = "forcetoend"
-        this.help = "楽曲追加設定をフェア追加モードか通常追加モードを使用するかを切り替えます。設定を`TRUE`にすると通常追加モードになります。"
+        this.help = "Switches between fair and normal song addition mode. Set this to `TRUE` to use normal song addition mode."
         this.aliases = bot.config.getAliases(this.name)
-        this.options = listOf(OptionData(OptionType.BOOLEAN, "value", "通常追加モードを使用するか", true));
+        this.options = listOf(OptionData(OptionType.BOOLEAN, "value", "Use normal append mode", true));
     }
 
     override fun doCommand(event: CommandEvent) {
@@ -38,19 +38,19 @@ class ForceToEnd(bot: Bot) : DJCommand(bot) {
 
         if (event.args.isEmpty()) {
             newSetting = !nowSetting!!
-        } else if (event.args.equals("true", ignoreCase = true) || event.args.equals("on", ignoreCase = true) || event.args.equals("有効", ignoreCase = true)) {
+        } else if (event.args.equals("true", ignoreCase = true) || event.args.equals("on", ignoreCase = true) || event.args.equals("valid", ignoreCase = true)) {
             newSetting = true
-        } else if (event.args.equals("false", ignoreCase = true) || event.args.equals("off", ignoreCase = true) || event.args.equals("無効", ignoreCase = true)) {
+        } else if (event.args.equals("false", ignoreCase = true) || event.args.equals("off", ignoreCase = true) || event.args.equals("invalid", ignoreCase = true)) {
             newSetting = false
         }
 
         bot.settingsManager.getSettings(event.guild)?.isForceToEndQue = newSetting
 
-        var msg = "再生待ちへの追加方法を変更しました。\n設定:"
+        var msg = "The method of adding to the playback queue has been changed. \nSettings:"
         if (newSetting == true) {
-            msg += "通常追加モード\nリクエストした曲を再生待ちの最後に追加します。"
+            msg += "Normal Add Mode\nThe requested song is added to the end of the playback queue."
         } else if (newSetting == false) {
-            msg += "フェア追加モード\nリクエストした曲をフェアな順序で再生待ちに追加します。"
+            msg += "Fair Add Mode\nRequested songs are added to the queue in a fair order."
         }
 
         event.replySuccess(msg)
@@ -65,11 +65,11 @@ class ForceToEnd(bot: Bot) : DJCommand(bot) {
 
         bot.settingsManager.getSettings(event.guild)?.isForceToEndQue = newSetting
 
-        var msg = "再生待ちへの追加方法を変更しました。\n設定:"
+        var msg = "The method of adding to the playback queue has been changed. \nSettings:"
         if (newSetting == true) {
-            msg += "通常追加モード\nリクエストした曲を再生待ちの最後に追加します。"
+            msg += "Normal Add Mode\nThe requested song is added to the end of the playback queue."
         } else if (newSetting == false) {
-            msg += "フェア追加モード\nリクエストした曲をフェアな順序で再生待ちに追加します。"
+            msg += "Fair Add Mode\nRequested songs are added to the queue in a fair order."
         }
 
         event.reply(msg).queue()

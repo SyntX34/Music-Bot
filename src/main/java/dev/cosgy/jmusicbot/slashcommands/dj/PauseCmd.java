@@ -33,7 +33,7 @@ public class PauseCmd extends DJCommand {
     public PauseCmd(Bot bot) {
         super(bot);
         this.name = "pause";
-        this.help = "現在の曲を一時停止します";
+        this.help = "Pauses the current song";
         this.aliases = bot.getConfig().getAliases(this.name);
         this.bePlaying = true;
     }
@@ -42,30 +42,29 @@ public class PauseCmd extends DJCommand {
     public void doCommand(CommandEvent event) {
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getPlayer().isPaused()) {
-            event.replyWarning("曲はすでに一時停止しています。 `" + event.getClient().getPrefix() + " play` を使用して一時停止を解除する事ができます。");
+            event.replyWarning("The song is already paused. You can unpause it using `" + event.getClient().getPrefix() + " play`.");
             return;
         }
         handler.getPlayer().setPaused(true);
-        log.info(event.getGuild().getName() + "で" + handler.getPlayer().getPlayingTrack().getInfo().title + "を一時停止しました。");
-        event.replySuccess("**" + handler.getPlayer().getPlayingTrack().getInfo().title + "**を一時停止にしました。 `" + event.getClient().getPrefix() + " play` を使用すると一時停止を解除できます。");
-
+        log.info(event.getGuild().getName() + "paused on " + handler.getPlayer().getPlayingTrack().getInfo().title + "");
+        event.replySuccess("**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** has been paused. Use `" + event.getClient().getPrefix() + " play` to unpause.");
         Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PAUSED);
     }
 
     @Override
     public void doCommand(SlashCommandEvent event) {
         if (!checkDJPermission(event.getClient(), event)) {
-            event.reply(event.getClient().getWarning() + "権限がないため実行できません。").queue();
+            event.reply(event.getClient().getWarning() + "Cannot execute due to insufficient permission.").queue();
             return;
         }
         AudioHandler handler = (AudioHandler) event.getGuild().getAudioManager().getSendingHandler();
         if (handler.getPlayer().isPaused()) {
-            event.reply(event.getClient().getWarning() + "曲はすでに一時停止しています。 `" + event.getClient().getPrefix() + " play` を使用して一時停止を解除する事ができます。").queue();
+            event.reply(event.getClient().getWarning() + "The song is already paused. `" + event.getClient().getPrefix() + "You can unpause it using play`.").queue();
             return;
         }
         handler.getPlayer().setPaused(true);
-        log.info(event.getGuild().getName() + "で" + handler.getPlayer().getPlayingTrack().getInfo().title + "を一時停止しました。");
-        event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "**を一時停止にしました。 `" + event.getClient().getPrefix() + " play` を使用すると一時停止を解除できます。").queue();
+        log.info(event.getGuild().getName() + "paused on " + handler.getPlayer().getPlayingTrack().getInfo().title + "");
+        event.reply(event.getClient().getSuccess() + "**" + handler.getPlayer().getPlayingTrack().getInfo().title + "** has been paused. `" + event.getClient().getPrefix() + " Use play` to unpause.").queue();
 
         Bot.updatePlayStatus(event.getGuild(), event.getGuild().getSelfMember(), PlayStatus.PAUSED);
     }
